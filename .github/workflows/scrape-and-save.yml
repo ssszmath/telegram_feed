@@ -1,0 +1,27 @@
+name: Scrape and save to Gist
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"   # هر 10 دقیقه یک بار
+  workflow_dispatch:         # برای اجرای دستی
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install requests
+
+      - name: Run scraper
+        env:
+          GIST_TOKEN: ${{ secrets.GIST_TOKEN }}
+        run: python scrape_and_save.py
